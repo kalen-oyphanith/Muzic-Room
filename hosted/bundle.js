@@ -23,9 +23,18 @@ var handleUpdate = function handleUpdate(e) {
   $("#postMessage").animate({
     width: 'hide'
   }, 350);
-  sendAjax('POST', $("#settingsForm").attr("action"), $("#settingsForm").serialize(), function () {
-    loadPostsFromServer();
-  });
+
+  if ($("#pass2").val() == '') {
+    handleError("Confirm your new password");
+    return false;
+  }
+
+  if ($("#pass").val() !== $("#pass2").val()) {
+    handleError("Passwords do not match");
+    return false;
+  }
+
+  sendAjax('POST', $("#settingsWindow").attr("action"), $("#settingsWindow").serialize(), redirect);
   return false;
 };
 
@@ -50,7 +59,6 @@ var PostForm = function PostForm(props) {
     rows: "5",
     cols: "40",
     id: "postBlogPost",
-    onkeyup: "this.value = this.value.replace(/[&*<>/']/g, '')",
     type: "text",
     name: "blogPost",
     placeholder: "write a post!"
@@ -65,16 +73,44 @@ var PostForm = function PostForm(props) {
   }));
 };
 
-var FeedWindow = function FeedWindow() {
-  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", null, "Let's see what others are saying!"));
-};
-
-var ProfileWindow = function ProfileWindow() {
-  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", null, "My Profile"), /*#__PURE__*/React.createElement("p", null, "Welcome to your account! Get to blogging"));
-};
-
 var SettingsWindow = function SettingsWindow(props) {
-  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", null, "Account Information"), /*#__PURE__*/React.createElement("p", null, " Username: (username goes here)"));
+  return /*#__PURE__*/React.createElement("form", {
+    id: "settingsWindow",
+    onSubmit: handleUpdate,
+    name: "settingsWindow",
+    action: "/signupUpdate",
+    method: "POST",
+    className: "settingsWindow"
+  }, /*#__PURE__*/React.createElement("label", {
+    htmlFor: "bio"
+  }, "Bio: "), /*#__PURE__*/React.createElement("textarea", {
+    rows: "2",
+    cols: "40",
+    id: "postBio",
+    type: "text",
+    name: "bio",
+    placeholder: "Write something about yourself! Do you play an instrument? Preferences in music..."
+  }), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("label", {
+    htmlFor: "passwordChange"
+  }, "Password change:"), /*#__PURE__*/React.createElement("input", {
+    id: "pass",
+    type: "text",
+    name: "pass",
+    placeholder: "New password"
+  }), /*#__PURE__*/React.createElement("input", {
+    id: "pass2",
+    type: "text",
+    name: "pass2",
+    placeholder: "Confirm new password"
+  }), /*#__PURE__*/React.createElement("input", {
+    type: "hidden",
+    name: "_csrf",
+    value: props.csrf
+  }), /*#__PURE__*/React.createElement("input", {
+    className: "formSubmit",
+    type: "submit",
+    value: "Update"
+  }));
 };
 
 var PostList = function PostList(props) {
@@ -107,55 +143,26 @@ var PostList = function PostList(props) {
   }, postNodes);
 };
 
-var SettingsForm = function SettingsForm(props) {
-  return /*#__PURE__*/React.createElement("form", {
-    id: "settingForm",
-    onSubmit: handleUpdate,
-    name: "settingForm",
-    action: "/maker",
-    method: "POST",
-    className: "settingForm"
-  }, /*#__PURE__*/React.createElement("label", {
-    htmlFor: "bio"
-  }, "Bio: "), /*#__PURE__*/React.createElement("textarea", {
-    rows: "2",
-    cols: "40",
-    id: "postBio",
-    type: "text",
-    name: "bio",
-    placeholder: "Write something about yourself! Do you play an instrument? Preferences in music..."
-  }), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("label", {
-    htmlFor: "passwordChange"
-  }, "Password change:"), /*#__PURE__*/React.createElement("input", {
-    id: "passwordChange",
-    type: "text",
-    name: "passwordChange",
-    placeholder: "New password"
-  }), /*#__PURE__*/React.createElement("input", {
-    type: "hidden",
-    name: "_csrf",
-    value: props.csrf
-  }), /*#__PURE__*/React.createElement("input", {
-    className: "makePostSubmit",
-    type: "submit",
-    value: "Update"
-  }));
+var FeedWindow = function FeedWindow() {
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", null, "Let's see what others are saying!"));
 };
 
-var loadAllPostsFromServer = function loadAllPostsFromServer() {
-  sendAjax('GET', '/getAllPosts', null, function (data) {
-    ReactDOM.render( /*#__PURE__*/React.createElement(PostList, {
-      posts: data.posts
-    }), document.querySelector("#posts"));
-  });
+var ProfileWindow = function ProfileWindow() {
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", null, "My Profile"), /*#__PURE__*/React.createElement("p", null, "Welcome to your account! Get to blogging"));
 };
 
-var loadPostsFromServer = function loadPostsFromServer() {
-  sendAjax('GET', '/getPosts', null, function (data) {
-    ReactDOM.render( /*#__PURE__*/React.createElement(PostList, {
-      posts: data.posts
-    }), document.querySelector("#posts"));
+var SettingsHeadingWindow = function SettingsHeadingWindow(props) {
+  var postNodes = props.account.map(function (account) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: account._id,
+      className: "post"
+    }, /*#__PURE__*/React.createElement("img", {
+      src: "/assets/img/userFace.png",
+      alt: "post face",
+      className: "postFace"
+    }), /*#__PURE__*/React.createElement("h1", null, "username:", account.owner));
   });
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", null, "Account Information"), /*#__PURE__*/React.createElement("p", null, " Username: (username goes here)"));
 };
 
 var createFeedWindow = function createFeedWindow(csrf) {
@@ -180,12 +187,36 @@ var createProfileWindow = function createProfileWindow(csrf) {
 };
 
 var createSettingsWindow = function createSettingsWindow(csrf) {
-  ReactDOM.render( /*#__PURE__*/React.createElement(SettingsWindow, {
-    csrf: csrf
-  }), document.querySelector("#header"));
-  ReactDOM.render( /*#__PURE__*/React.createElement(SettingsForm, {
+  ReactDOM.render( /*#__PURE__*/React.createElement(SettingsHeadingWindow, {
     csrf: csrf
   }), document.querySelector("#makePost"));
+  ReactDOM.render( /*#__PURE__*/React.createElement(SettingsWindow, {
+    csrf: csrf
+  }), document.querySelector("#posts"));
+};
+
+var loadAllPostsFromServer = function loadAllPostsFromServer() {
+  sendAjax('GET', '/getAllPosts', null, function (data) {
+    ReactDOM.render( /*#__PURE__*/React.createElement(PostList, {
+      posts: data.posts
+    }), document.querySelector("#posts"));
+  });
+};
+
+var loadPostsFromServer = function loadPostsFromServer() {
+  sendAjax('GET', '/getPosts', null, function (data) {
+    ReactDOM.render( /*#__PURE__*/React.createElement(PostList, {
+      posts: data.posts
+    }), document.querySelector("#posts"));
+  });
+};
+
+var loadAccountsFromServer = function loadAccountsFromServer() {
+  sendAjax('GET', '/getAccount', null, function (data) {
+    ReactDOM.render( /*#__PURE__*/React.createElement(PostList, {
+      accounts: data.accounts
+    }), document.querySelector("#posts"));
+  });
 };
 
 var setup = function setup(csrf) {
@@ -209,6 +240,7 @@ var setup = function setup(csrf) {
     createSettingsWindow(csrf);
     return false;
   });
+  loadAccountsFromServer();
   loadAllPostsFromServer();
   createFeedWindow(csrf);
 };

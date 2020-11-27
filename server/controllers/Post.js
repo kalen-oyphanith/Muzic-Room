@@ -92,7 +92,26 @@ const getAllPosts = (request, response) => {
   }).lean();
 };
 
+const getAccount = (request, response) => {
+  const req = request;
+  const res = response;
+
+  return Account.AccountModel.find({}, req.session.account._id, (err, people) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({
+        error: 'An error occurred',
+      });
+    }
+
+    return res.json({
+      accounts: people,
+    });
+  });
+};
+
 module.exports.makerPage = makerPage;
 module.exports.getPosts = getPosts;
+module.exports.getAccount = getAccount;
 module.exports.getAllPosts = getAllPosts;
 module.exports.make = makePost;

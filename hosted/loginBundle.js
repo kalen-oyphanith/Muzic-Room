@@ -39,11 +39,15 @@ var handleSignup = function handleSignup(e) {
 };
 
 var HomeWindow = function HomeWindow(props) {
-  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", {
-    htmlFor: "heading"
+  return /*#__PURE__*/React.createElement("div", {
+    id: "homePage"
+  }, /*#__PURE__*/React.createElement("h1", {
+    htmlFor: "heading",
+    id: "homeHeading"
   }, "Welcome to the Muzic Room"), /*#__PURE__*/React.createElement("p", {
-    htmlFor: "description"
-  }, "This is a music blog where muscians of any experience level can interact. Looking for some assistance? Just look at each other's post."), /*#__PURE__*/React.createElement("p", null, "Make sure to make an account if you don't have one! Remember what mama told you! If you have nothing nice to say, don't say it at all!"));
+    htmlFor: "description",
+    id: "homeDescription"
+  }, "This is a music blog where muscians of any experience level can interact. Looking for some assistance? Just look at each other's post. Make sure to make an account if you don't have one! Remember what mama told you! If you have nothing nice to say, don't say it at all!"));
 };
 
 var LoginWindow = function LoginWindow(props) {
@@ -54,6 +58,8 @@ var LoginWindow = function LoginWindow(props) {
     action: "/login",
     method: "POST",
     className: "mainForm"
+  }, /*#__PURE__*/React.createElement("div", {
+    id: "homeInputs"
   }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "username"
   }, "Username: "), /*#__PURE__*/React.createElement("input", {
@@ -61,7 +67,7 @@ var LoginWindow = function LoginWindow(props) {
     type: "text",
     name: "username",
     placeholder: "username"
-  }), /*#__PURE__*/React.createElement("label", {
+  }), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("label", {
     htmlFor: "pass"
   }, "Password: "), /*#__PURE__*/React.createElement("input", {
     id: "pass",
@@ -72,11 +78,13 @@ var LoginWindow = function LoginWindow(props) {
     type: "hidden",
     name: "_csrf",
     value: props.csrf
-  }), /*#__PURE__*/React.createElement("input", {
+  }), /*#__PURE__*/React.createElement("div", {
+    id: "signupButt"
+  }, /*#__PURE__*/React.createElement("input", {
     className: "formSubmit",
     type: "submit",
     value: "Sign in"
-  }));
+  }))));
 };
 
 var SignupWindow = function SignupWindow(props) {
@@ -87,6 +95,8 @@ var SignupWindow = function SignupWindow(props) {
     action: "/signup",
     method: "POST",
     className: "mainForm"
+  }, /*#__PURE__*/React.createElement("div", {
+    id: "homeInputs"
   }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "username"
   }, "Username: "), /*#__PURE__*/React.createElement("input", {
@@ -94,29 +104,31 @@ var SignupWindow = function SignupWindow(props) {
     type: "text",
     name: "username",
     placeholder: "username"
-  }), /*#__PURE__*/React.createElement("label", {
+  }), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("label", {
     htmlFor: "pass"
   }, "Password: "), /*#__PURE__*/React.createElement("input", {
     id: "pass",
     type: "password",
     name: "pass",
     placeholder: "password"
-  }), /*#__PURE__*/React.createElement("label", {
+  }), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("label", {
     htmlFor: "pass2"
   }, "Password: "), /*#__PURE__*/React.createElement("input", {
     id: "pass2",
     type: "password",
     name: "pass2",
     placeholder: "retype password"
-  }), /*#__PURE__*/React.createElement("input", {
+  }), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("input", {
     type: "hidden",
     name: "_csrf",
     value: props.csrf
-  }), /*#__PURE__*/React.createElement("input", {
+  }), /*#__PURE__*/React.createElement("div", {
+    id: "signupButt"
+  }, /*#__PURE__*/React.createElement("input", {
     className: "formSubmit",
     type: "submit",
     value: "Sign up"
-  }));
+  }))));
 };
 
 var loadPostsFromServer = function loadPostsFromServer() {

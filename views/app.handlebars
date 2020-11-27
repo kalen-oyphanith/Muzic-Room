@@ -13,16 +13,23 @@
 </head>
 
 <body>
-    <nav><a href="/login">
+    <nav>
+        <a href="/login">
         <img id="logo" src="/assets/img/face.png" alt="face logo" />
         </a>
-        <div class="navlink"><a id="allPostsButton" href="/getAllPosts">Feed</a></div>
-        <div class="navlink"><a id="profileButton" href="/getPosts">Profile</a></div>    
-        <div class="navlink"><a id="settingsButton">Settings</a></div>
-        <div class="navlink"><a id="logoutButton" href="/logout">Log out</a></div>
-
+        
+        <div class="topnav">
+            <div class="navlink"><a id="allPostsButton" href="/getAllPosts">Feed</a></div>
+            <div class="navlink"><a id="profileButton" href="/getPosts">Profile</a></div>    
+        
+            <div class="topnav-right">
+                <a id="settingsButton">Settings</a>
+                <a id="logoutButton" href="/logout">Log out</a>
+            </div>
+        </div>
 
     </nav>
+    
     <section id="header">
     </section>
     <section id="makePost">

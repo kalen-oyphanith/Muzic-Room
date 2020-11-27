@@ -20,11 +20,19 @@ const handlePost = (e) => {
 const handleUpdate = (e) => {
     e.preventDefault();
     
-    $("#postMessage").animate({width: 'hide'}, 350);
+    $("#postMessage").animate({width:'hide'}, 350);
     
-    sendAjax('POST', $("#settingsForm").attr("action"), $("#settingsForm").serialize(), function() {
-        loadPostsFromServer();
-    });
+    if($("#pass2").val() == '') {
+        handleError("Confirm your new password");
+        return false;
+    }
+    
+    if($("#pass").val() !== $("#pass2").val()){
+        handleError("Passwords do not match");
+        return false;
+    }
+    
+    sendAjax('POST', $("#settingsWindow").attr("action"), $("#settingsWindow").serialize(), redirect);
     
     return false;
 };
@@ -43,7 +51,7 @@ const PostForm = (props) => {
             
             <br></br>
             <label htmlFor="blogPost">Post: </label>
-            <textarea rows="5" cols="40" id="postBlogPost" onkeyup="this.value = this.value.replace(/[&*<>/']/g, '')" type="text" name="blogPost" placeholder="write a post!"></textarea>
+            <textarea rows="5" cols="40" id="postBlogPost" type="text" name="blogPost" placeholder="write a post!"></textarea>
 
             <input type="hidden" name="_csrf" value={props.csrf} />
             <input className="makePostSubmit" type="submit" value="Make Post" />
@@ -51,31 +59,29 @@ const PostForm = (props) => {
     );
 };
 
-const FeedWindow = () => {
-    return(
-        <div>
-            <h1>Let's see what others are saying!</h1>
-        </div>
-    );
-};
-
-const ProfileWindow = () => {
+const SettingsWindow = (props) => {
     return (
-        <div>
-            <h1>My Profile</h1>
-            <p>Welcome to your account! Get to blogging</p>
-        </div>
+        <form id="settingsWindow"
+            onSubmit={handleUpdate}
+            name="settingsWindow"
+            action="/signupUpdate"
+            method="POST"
+            className="settingsWindow"
+        >
+            <label htmlFor="bio">Bio: </label>
+            <textarea rows="2" cols="40" id="postBio" type="text" name="bio" placeholder="Write something about yourself! Do you play an instrument? Preferences in music..."></textarea>
+            
+            <br></br>
+            
+            <label htmlFor="passwordChange">Password change:</label>
+            <input id="pass" type="text" name="pass" placeholder="New password" />             
+            <input id="pass2" type="text" name="pass2" placeholder="Confirm new password" />            
+
+            <input type="hidden" name="_csrf" value={props.csrf} />
+            <input className="formSubmit" type="submit" value="Update" />
+        </form> 
     );
 };
-
-const SettingsWindow = function(props) {
-        return (
-            <div>
-                <h1>Account Information</h1>
-                <p> Username: (username goes here)</p>
-            </div>
-        );
-}
 
 const PostList = function(props) {
     if(props.posts.length === 0) {
@@ -105,44 +111,41 @@ const PostList = function(props) {
     );
 };
 
-const SettingsForm = (props) => {
-    return (
-        <form id="settingForm"
-            onSubmit={handleUpdate}
-            name="settingForm"
-            action="/maker"
-            method="POST"
-            className="settingForm"
-        >
-            <label htmlFor="bio">Bio: </label>
-            <textarea rows="2" cols="40" id="postBio" type="text" name="bio" placeholder="Write something about yourself! Do you play an instrument? Preferences in music..."></textarea>
-            
-            <br></br>
-            
-            <label htmlFor="passwordChange">Password change:</label>
-            <input id="passwordChange" type="text" name="passwordChange" placeholder="New password" />            
-
-            <input type="hidden" name="_csrf" value={props.csrf} />
-            <input className="makePostSubmit" type="submit" value="Update" />
-        </form> 
+const FeedWindow = () => {
+    return(
+        <div>
+            <h1>Let's see what others are saying!</h1>
+        </div>
     );
 };
 
-const loadAllPostsFromServer = () => {
-    sendAjax('GET', '/getAllPosts', null, (data) => {
-        ReactDOM.render(
-            <PostList posts={data.posts} />, document.querySelector("#posts")
-        );
-    });
+const ProfileWindow = () => {
+    return (
+        <div>
+            <h1>My Profile</h1>
+            <p>Welcome to your account! Get to blogging</p>
+        </div>
+    );
 };
 
-const loadPostsFromServer = () => {
-    sendAjax('GET', '/getPosts', null, (data) => {
-        ReactDOM.render(
-            <PostList posts={data.posts} />, document.querySelector("#posts")
+const SettingsHeadingWindow = function(props) {
+
+
+    const postNodes = props.account.map(function(account) {
+        return (
+            <div key={account._id} className="post">
+                <img src="/assets/img/userFace.png" alt="post face" className="postFace" />
+                <h1>username:{account.owner}</h1>
+            </div>
         );
     });
-};
+        return (
+            <div>
+                <h1>Account Information</h1>
+                <p> Username: (username goes here)</p>
+            </div>
+        );
+}
 
 const createFeedWindow = (csrf) => {
     ReactDOM.render(
@@ -174,14 +177,38 @@ const createProfileWindow = (csrf) => {
 
 const createSettingsWindow = (csrf) => {
     ReactDOM.render(
-        <SettingsWindow csrf={csrf} />, 
-        document.querySelector("#header")
-    );  
+        <SettingsHeadingWindow csrf={csrf} />, 
+        document.querySelector("#makePost")
+    );          
     
     ReactDOM.render(
-        <SettingsForm csrf={csrf} />,
-        document.querySelector("#makePost")
-    );
+        <SettingsWindow csrf={csrf} />, 
+        document.querySelector("#posts")
+    );      
+};
+
+const loadAllPostsFromServer = () => {
+    sendAjax('GET', '/getAllPosts', null, (data) => {
+        ReactDOM.render(
+            <PostList posts={data.posts} />, document.querySelector("#posts")
+        );
+    });
+};
+
+const loadPostsFromServer = () => {
+    sendAjax('GET', '/getPosts', null, (data) => {
+        ReactDOM.render(
+            <PostList posts={data.posts} />, document.querySelector("#posts")
+        );
+    });
+};
+
+const loadAccountsFromServer = () => {
+    sendAjax('GET', '/getAccount', null, (data) => {
+        ReactDOM.render(
+            <PostList accounts={data.accounts} />, document.querySelector("#posts")
+        );
+    });
 };
 
 const setup = function(csrf) {
@@ -211,7 +238,7 @@ const setup = function(csrf) {
 
     });
 
-    
+    loadAccountsFromServer();
     loadAllPostsFromServer();
     createFeedWindow(csrf);
 

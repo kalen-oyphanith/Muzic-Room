@@ -41,10 +41,9 @@ const handleSignup = (e) => {
 
 const HomeWindow = (props) => {
     return ( 
-        <div>
-            <h1 htmlFor="heading">Welcome to the Muzic Room</h1>
-            <p htmlFor="description">This is a music blog where muscians of any experience level can interact. Looking for some assistance? Just look at each other's post.</p>
-            <p>Make sure to make an account if you don't have one! Remember what mama told you! If you have nothing nice to say, don't say it at all!</p>
+        <div id="homePage">
+            <h1 htmlFor="heading" id="homeHeading">Welcome to the Muzic Room</h1>
+            <p htmlFor="description" id="homeDescription">This is a music blog where muscians of any experience level can interact. Looking for some assistance? Just look at each other's post. Make sure to make an account if you don't have one! Remember what mama told you! If you have nothing nice to say, don't say it at all!</p>
         </div>
     );
 };
@@ -58,12 +57,18 @@ const LoginWindow = (props) => {
             method = "POST"
             className = "mainForm" 
         >
-        <label htmlFor="username">Username: </label>
-        <input id="user" type="text" name="username" placeholder="username" />
-        <label htmlFor="pass">Password: </label>
-        <input id="pass" type="password" name="pass" placeholder="password" />
-        <input type="hidden" name="_csrf" value={props.csrf}/>
-        <input className="formSubmit" type="submit" value="Sign in" />  
+        <div id="homeInputs">
+            <label htmlFor="username">Username: </label>
+            <input id="user" type="text" name="username" placeholder="username" />
+            <br></br>
+            <label htmlFor="pass">Password: </label>
+            <input id="pass" type="password" name="pass" placeholder="password" />
+            <input type="hidden" name="_csrf" value={props.csrf}/>
+            <div id="signupButt">
+                <input className="formSubmit" type="submit" value="Sign in" />  
+            </div>        
+        </div>
+    
         </form>
     );
 };
@@ -77,14 +82,22 @@ const SignupWindow = (props) => {
             method="POST"
             className="mainForm"
         >
-        <label htmlFor="username">Username: </label>
-        <input id="user" type="text" name="username" placeholder="username" />
-        <label htmlFor="pass">Password: </label>
-        <input id="pass" type="password" name="pass" placeholder="password"/>
-        <label htmlFor="pass2">Password: </label>
-        <input id="pass2" type="password" name="pass2" placeholder="retype password" />
-        <input type="hidden" name="_csrf" value={props.csrf} />
-        <input className="formSubmit" type="submit" value="Sign up" />
+        <div id="homeInputs">
+            <label htmlFor="username">Username: </label>
+            <input id="user" type="text" name="username" placeholder="username" />
+            <br></br>
+            <label htmlFor="pass">Password: </label>
+            <input id="pass" type="password" name="pass" placeholder="password"/>
+            <br></br>
+            <label htmlFor="pass2">Password: </label>
+            <input id="pass2" type="password" name="pass2" placeholder="retype password" />
+            <br></br>
+            <input type="hidden" name="_csrf" value={props.csrf} />
+                        
+            <div id="signupButt">
+                <input className="formSubmit" type="submit" value="Sign up" />
+            </div>
+        </div>
         </form>
     ); 
 };
