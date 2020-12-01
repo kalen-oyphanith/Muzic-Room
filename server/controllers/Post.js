@@ -32,6 +32,7 @@ const makePost = (req, res) => {
     blogPost: req.body.blogPost,
     createdDate: req.body.createdDate,
     owner: req.session.account._id,
+    username: req.session.account,
   };
 
   const newPost = new Post.PostModel(postData);
@@ -92,26 +93,17 @@ const getAllPosts = (request, response) => {
   }).lean();
 };
 
-const getAccount = (request, response) => {
-  const req = request;
-  const res = response;
-
-  return Account.AccountModel.find({}, req.session.account._id, (err, people) => {
+const deletePost = (req, res) => {
+  Post.PostModel.deletePost(req.session.account._id, (err) => {
     if (err) {
-      console.log(err);
-      return res.status(400).json({
-        error: 'An error occurred',
-      });
+      return res.status(400).json({ error: 'An error occurred' });
     }
-
-    return res.json({
-      accounts: people,
-    });
+    return res.json({ redirect: '/maker' });
   });
 };
 
 module.exports.makerPage = makerPage;
 module.exports.getPosts = getPosts;
-module.exports.getAccount = getAccount;
 module.exports.getAllPosts = getAllPosts;
 module.exports.make = makePost;
+module.exports.deletePost = deletePost;

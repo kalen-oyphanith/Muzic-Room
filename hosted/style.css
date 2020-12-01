@@ -65,6 +65,14 @@ a:hover {
     font-size: 1.5em; 
 }
 
+#makePost, #posts, #header{
+    margin: 0% 30%
+}
+
+#postButton{
+    float: right;
+}
+
 .formSubmit{
 	border-radius: 20px;
 	border: 1px solid #FF4B2B;
@@ -139,12 +147,13 @@ a:hover {
     transform: rotate(330deg);
 }
 
-
+#header {
+    text-align: center;
+}
 
 #posts {
     width: 40%; 
     min-width: 400px;
-/*    margin: 0 auto;*/
     margin-top: 50px;
 }
 
@@ -159,13 +168,34 @@ a:hover {
     overflow: hidden;
 }
 
+#gridContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding-left: 0;
+  width: 100%;
+}
+#gridContainer img{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding-left: 0;
+  width: 30%;
+}
 
 img{
     width:10%;
 }
 
 input{
-  width: 15%;
+  width: 13%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+
+#makePost input, #posts input, #header input{
+  width: auto;
   padding: 12px 20px;
   margin: 8px 0;
   box-sizing: border-box;

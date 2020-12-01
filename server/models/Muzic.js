@@ -9,40 +9,40 @@ const convertId = mongoose.Types.ObjectId;
 const setPost = (post) => _.escape(post).trim();
 
 const PostSchema = new mongoose.Schema({
-    post: {
-        type: String,
-        required: true,
-        trim: true,
-        set: setPost,
-    },
-    age: {
-        type: Number,
-        min: 0,
-        required: true,
-    },
-    owner: {
-        type: mongoose.Schema.ObjectId,
-        required: true,
-        ref: 'Account',
-    },
+  post: {
+    type: String,
+    required: true,
+    trim: true,
+    set: setPost,
+  },
+  age: {
+    type: Number,
+    min: 0,
+    required: true,
+  },
+  owner: {
+    type: mongoose.Schema.ObjectId,
+    required: true,
+    ref: 'Account',
+  },
 
-    createdData: {
-        type: Date,
-        default: Date.now,
-    },
+  createdData: {
+    type: Date,
+    default: Date.UTC,
+  },
 });
 
 PostSchema.statics.toAPI = (doc) => ({
-    post: doc.post,
-    age: doc.age,
+  post: doc.post,
+  age: doc.age,
 });
 
 PostSchema.statics.findByOwner = (ownerId, callback) => {
-    const search = {
-        owner: convertId(ownerId),
-    };
+  const search = {
+    owner: convertId(ownerId),
+  };
 
-    return PostModel.find(search).select('post age').lean().exec(callback);
+  return PostModel.find(search).select('post age').lean().exec(callback);
 };
 
 PostModel = mongoose.model('Muzic', PostSchema);

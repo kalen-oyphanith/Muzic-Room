@@ -53,6 +53,13 @@ PostSchema.statics.findByOwner = (ownerId, callback) => {
   return PostModel.find(search).select('heading blogPost createdDate').lean().exec(callback);
 };
 
+PostSchema.statics.deletePost = (ownerId, callback) => {
+  const search = {
+    owner: convertId(ownerId),
+  };
+  return PostModel.deleteOne(search, callback);
+};
+
 PostModel = mongoose.model('Post', PostSchema);
 
 module.exports.PostModel = PostModel;
