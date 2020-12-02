@@ -1,5 +1,3 @@
-////// name = heading /////////    age = blogPost     ///////
-
 const handleLogin = (e) => {
     e.preventDefault();
 
@@ -11,7 +9,6 @@ const handleLogin = (e) => {
     }
 
     console.log($("input[name=_csrf]").val());
-    //console.log($("input[heading=_csrf]").val());
 
     sendAjax('POST', $("#loginForm").attr("action"), $("#loginForm").serialize(), redirect);
 
@@ -61,7 +58,7 @@ const LoginWindow = (props) => {
             <label htmlFor="username">Username: </label>
             <input id="user" type="text" name="username" placeholder="username" />
             <br></br>
-            <label htmlFor="pass">Password: </label>
+            <label htmlFor="pass">Password:</label>
             <input id="pass" type="password" name="pass" placeholder="password" />
             <input type="hidden" name="_csrf" value={props.csrf}/>
             <div id="signupButt">

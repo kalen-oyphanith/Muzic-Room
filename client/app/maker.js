@@ -35,6 +35,26 @@ const handleUpdate = (e) => {
     return false;
 };
 
+const handleInfo = (e) => {
+    e.preventDefault();
+    
+//    $("#postMessage").animate({width:'hide'}, 350);
+    
+    if($("#pass").val() == '' || $("#pass2").val() == '') {
+        handleError("All fields are required to update profile");
+        return false;
+    }
+    
+    if($("#pass").val() !== $("#pass2").val()){
+        handleError("Passwords do not match");
+        return false;
+    }
+    
+    sendAjax('POST', $("#infoForm").attr("action"), $("#infoForm").serialize(), redirect);
+    
+    return false;
+};
+
 const PostForm = (props) => {
     return (
         <form id="postForm"
@@ -46,8 +66,8 @@ const PostForm = (props) => {
         >
             <label htmlFor="heading">Heading: </label>
             <input id="postHeading" type="text" name="heading" placeholder="Heading" /> 
-            
             <br></br>
+            
             <label htmlFor="blogPost">Post: </label>
             <textarea rows="5" cols="40" id="postBlogPost" type="text" name="blogPost" placeholder="write a post!"></textarea>
 
@@ -57,6 +77,30 @@ const PostForm = (props) => {
     );
 };
 
+const InfoForm = (props) => {
+    return (
+        <form id="infoForm"
+            onSubmit={handleInfo}
+            name="settingsForm"
+            action="/passUpdate"
+            method="POST"
+            className="infoForm"
+        >
+            <label htmlFor="nickName">Name: </label>
+            <input id="nickName" type="text" name="nickName" placeholder="Your name" />   
+            <br></br>
+
+            <label htmlFor="bio">Bio: </label>
+            <textarea rows="2" cols="40" id="postBio" type="text" name="bio" placeholder="Write something about yourself! Do you play an instrument? Preferences in music..."></textarea>
+            <br></br>
+            <br></br>
+            
+            <input type="hidden" name="_csrf" value={props.csrf} />
+            <input className="formSubmit" type="submit" value="Update" />
+        </form> 
+    );
+}
+
 const SettingsForm = (props) => {
     return (
         <form id="settingsForm"
@@ -65,16 +109,7 @@ const SettingsForm = (props) => {
             action="/passUpdate"
             method="POST"
             className="settingsForm"
-        >
-            
-            <label htmlFor="nickName">Name: </label>
-            <input id="nickName" type="text" name="nickName" placeholder="Your name" />   
-            <br></br>
-            
-            <label htmlFor="bio">Bio: </label>
-            <textarea rows="2" cols="40" id="postBio" type="text" name="bio" placeholder="Write something about yourself! Do you play an instrument? Preferences in music..."></textarea>
-            <br></br>
-            
+        >   
             <label htmlFor="passwordChange">Password change:</label>
             <br></br>
             <input id="pass" type="text" name="pass" placeholder="New password" />   
@@ -88,7 +123,7 @@ const SettingsForm = (props) => {
     );
 };
 
-const PostList = function(props) {
+const PostList = function(props) {    
     if(props.posts.length === 0) {
         return(
             <div className="postList">
@@ -100,20 +135,26 @@ const PostList = function(props) {
     const postNodes = props.posts.map(function(post) {
         return (
             <div key={post._id} className="post">
-                <img src="/assets/img/userFace.png" alt="post face" className="postFace" />
-                <h1>username:{post.account}</h1>
-                <h3 className="postName"> {post.heading} </h3>
-                <p className="postAge"> {post.blogPost} </p>              
-                <p className="postDate"> {post.createdDate}</p>
-            </div>
+                <h3> {post.heading} </h3>
+                <p> {post.blogPost} </p>              
+                <p> {post.createdDate}</p>
+            </div> 
         );
     });
-
+    
     return (
         <div className="postList">
             {postNodes}
         </div>
     );
+};
+
+const loadUser = () => {
+    sendAjax('GET', '/getUser', null, (data) => {
+        ReactDOM.render(
+            <PostList user={data.user}/>, document.querySelector("#posts")
+        );
+    });
 };
 
 const FeedWindow = () => {
@@ -124,17 +165,15 @@ const FeedWindow = () => {
     );
 };
 
-const ProfileWindow = () => {
+const ProfileWindow = (props) => {
     return (
         <div>
             <h1>My Profile</h1>
-            <p>Welcome to your account! Get to blogging</p>
         </div>
     );
 };
 
 const SettingsHeadingWindow = function(props) {
-    
     return (
         <div>                
             <h1>Account Information</h1>
@@ -148,12 +187,11 @@ const PremiumWindow = () => {
         <div>                
             <h1>Get Your Sheet Music!</h1>
             <p>Learn more songs quickly with our sheet music provided!</p>
-        </div>
-        
+        </div>  
     );
 };
-const PremiumBodyWindow = () => {
-    
+
+const PremiumBodyWindow = () => {   
     return(
         <div id="gridContainer">
             <img src="/assets/img/sheet_1.png" alt="Sheet Music" />
@@ -185,7 +223,6 @@ const createFeedWindow = (csrf) => {
 };
 
 const createProfileWindow = (csrf) => {
-
     ReactDOM.render(
         <ProfileWindow csrf={csrf} />, 
         document.querySelector("#header")
@@ -203,6 +240,11 @@ const createProfileWindow = (csrf) => {
 const createSettingsWindow = (csrf) => {
     ReactDOM.render(
         <SettingsHeadingWindow csrf={csrf} />, 
+        document.querySelector("#header")
+    );          
+    
+    ReactDOM.render(
+        <InfoForm csrf={csrf} />, 
         document.querySelector("#makePost")
     );          
     
@@ -262,6 +304,7 @@ const setup = function(csrf) {
         e.preventDefault();
         createProfileWindow(csrf);
         loadPostsFromServer();
+        loadUser();
         return false;
 
     });   
@@ -278,11 +321,9 @@ const setup = function(csrf) {
         return false;
 
     });
-
+    
     loadAllPostsFromServer();
     createFeedWindow(csrf);
-
-
 };
 
 const getToken = () => {

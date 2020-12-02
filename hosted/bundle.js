@@ -37,6 +37,23 @@ var handleUpdate = function handleUpdate(e) {
   return false;
 };
 
+var handleInfo = function handleInfo(e) {
+  e.preventDefault(); //    $("#postMessage").animate({width:'hide'}, 350);
+
+  if ($("#pass").val() == '' || $("#pass2").val() == '') {
+    handleError("All fields are required to update profile");
+    return false;
+  }
+
+  if ($("#pass").val() !== $("#pass2").val()) {
+    handleError("Passwords do not match");
+    return false;
+  }
+
+  sendAjax('POST', $("#infoForm").attr("action"), $("#infoForm").serialize(), redirect);
+  return false;
+};
+
 var PostForm = function PostForm(props) {
   return /*#__PURE__*/React.createElement("form", {
     id: "postForm",
@@ -73,14 +90,14 @@ var PostForm = function PostForm(props) {
   }));
 };
 
-var SettingsForm = function SettingsForm(props) {
+var InfoForm = function InfoForm(props) {
   return /*#__PURE__*/React.createElement("form", {
-    id: "settingsForm",
-    onSubmit: handleUpdate,
+    id: "infoForm",
+    onSubmit: handleInfo,
     name: "settingsForm",
     action: "/passUpdate",
     method: "POST",
-    className: "settingsForm"
+    className: "infoForm"
   }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "nickName"
   }, "Name: "), /*#__PURE__*/React.createElement("input", {
@@ -97,7 +114,26 @@ var SettingsForm = function SettingsForm(props) {
     type: "text",
     name: "bio",
     placeholder: "Write something about yourself! Do you play an instrument? Preferences in music..."
-  }), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("label", {
+  }), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("input", {
+    type: "hidden",
+    name: "_csrf",
+    value: props.csrf
+  }), /*#__PURE__*/React.createElement("input", {
+    className: "formSubmit",
+    type: "submit",
+    value: "Update"
+  }));
+};
+
+var SettingsForm = function SettingsForm(props) {
+  return /*#__PURE__*/React.createElement("form", {
+    id: "settingsForm",
+    onSubmit: handleUpdate,
+    name: "settingsForm",
+    action: "/passUpdate",
+    method: "POST",
+    className: "settingsForm"
+  }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "passwordChange"
   }, "Password change:"), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("input", {
     id: "pass",
@@ -133,29 +169,27 @@ var PostList = function PostList(props) {
     return /*#__PURE__*/React.createElement("div", {
       key: post._id,
       className: "post"
-    }, /*#__PURE__*/React.createElement("img", {
-      src: "/assets/img/userFace.png",
-      alt: "post face",
-      className: "postFace"
-    }), /*#__PURE__*/React.createElement("h1", null, "username:", post.account), /*#__PURE__*/React.createElement("h3", {
-      className: "postName"
-    }, " ", post.heading, " "), /*#__PURE__*/React.createElement("p", {
-      className: "postAge"
-    }, " ", post.blogPost, " "), /*#__PURE__*/React.createElement("p", {
-      className: "postDate"
-    }, " ", post.createdDate));
+    }, /*#__PURE__*/React.createElement("h3", null, " ", post.heading, " "), /*#__PURE__*/React.createElement("p", null, " ", post.blogPost, " "), /*#__PURE__*/React.createElement("p", null, " ", post.createdDate));
   });
   return /*#__PURE__*/React.createElement("div", {
     className: "postList"
   }, postNodes);
 };
 
+var loadUser = function loadUser() {
+  sendAjax('GET', '/getUser', null, function (data) {
+    ReactDOM.render( /*#__PURE__*/React.createElement(PostList, {
+      user: data.user
+    }), document.querySelector("#posts"));
+  });
+};
+
 var FeedWindow = function FeedWindow() {
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", null, "Let's see what others are saying!"));
 };
 
-var ProfileWindow = function ProfileWindow() {
-  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", null, "My Profile"), /*#__PURE__*/React.createElement("p", null, "Welcome to your account! Get to blogging"));
+var ProfileWindow = function ProfileWindow(props) {
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", null, "My Profile"));
 };
 
 var SettingsHeadingWindow = function SettingsHeadingWindow(props) {
@@ -218,6 +252,9 @@ var createProfileWindow = function createProfileWindow(csrf) {
 var createSettingsWindow = function createSettingsWindow(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(SettingsHeadingWindow, {
     csrf: csrf
+  }), document.querySelector("#header"));
+  ReactDOM.render( /*#__PURE__*/React.createElement(InfoForm, {
+    csrf: csrf
   }), document.querySelector("#makePost"));
   ReactDOM.render( /*#__PURE__*/React.createElement(SettingsForm, {
     csrf: csrf
@@ -267,6 +304,7 @@ var setup = function setup(csrf) {
     e.preventDefault();
     createProfileWindow(csrf);
     loadPostsFromServer();
+    loadUser();
     return false;
   });
   premiumButton.addEventListener("click", function (e) {

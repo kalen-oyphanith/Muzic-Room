@@ -19,7 +19,7 @@ const makerPage = (req, res) => {
     });
   });
 };
-// //// name = heading /////////    age = blogPost     /////// height = createdDate
+
 const makePost = (req, res) => {
   if (!req.body.heading || !req.body.blogPost) {
     return res.status(400).json({
@@ -31,13 +31,14 @@ const makePost = (req, res) => {
     heading: req.body.heading,
     blogPost: req.body.blogPost,
     createdDate: req.body.createdDate,
+    nickName: req.body.nickName,
     owner: req.session.account._id,
-    username: req.session.account,
+    username: req.session.account.username,
   };
 
   const newPost = new Post.PostModel(postData);
 
-  const postPromise = newPost.save();
+  const postPromise = newPost.save(); 
 
   postPromise.then(() => res.json({
     redirect: '/maker',

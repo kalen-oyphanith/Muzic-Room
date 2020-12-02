@@ -1,6 +1,5 @@
 "use strict";
 
-////// name = heading /////////    age = blogPost     ///////
 var handleLogin = function handleLogin(e) {
   e.preventDefault();
   $("#postMessage").animate({
@@ -12,8 +11,7 @@ var handleLogin = function handleLogin(e) {
     return false;
   }
 
-  console.log($("input[name=_csrf]").val()); //console.log($("input[heading=_csrf]").val());
-
+  console.log($("input[name=_csrf]").val());
   sendAjax('POST', $("#loginForm").attr("action"), $("#loginForm").serialize(), redirect);
   return false;
 };
@@ -69,7 +67,7 @@ var LoginWindow = function LoginWindow(props) {
     placeholder: "username"
   }), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("label", {
     htmlFor: "pass"
-  }, "Password: "), /*#__PURE__*/React.createElement("input", {
+  }, "Password:"), /*#__PURE__*/React.createElement("input", {
     id: "pass",
     type: "password",
     name: "pass",
