@@ -99,7 +99,7 @@ const signup = (request, response) => {
   });
 };
 
- const passUpdate = (request, response) => {
+const passUpdate = (request, response) => {
   const req = request;
   const res = response;
 
@@ -128,32 +128,14 @@ const signup = (request, response) => {
       password: hash,
     }, (err) => {
       if (err) {
-        return res.status(400).json({ 
-            error: 'An error occured' 
+        return res.status(400).json({
+          error: 'An error occured',
         });
       }
       return res.status(200);
     });
-    res.json({ 
-        redirect: '/maker' 
-    });
-  });
-};
-
-const getUser = (request, response) => {
-  const req = request;
-  const res = response;
-
-  return Account.AccountModel.findUsername((err, docs) => {
-    if (err) {
-      console.log(err);
-      return res.status(400).json({
-        error: 'An error occurred',
-      });
-    }
-
-    return res.json({
-      user: req.session.account.username,
+    res.json({
+      redirect: '/maker',
     });
   });
 };
@@ -174,5 +156,4 @@ module.exports.login = login;
 module.exports.logout = logout;
 module.exports.signup = signup;
 module.exports.passUpdate = passUpdate;
-module.exports.getUser = getUser;
 module.exports.getToken = getToken;

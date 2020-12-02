@@ -10,7 +10,6 @@ const router = (app) => {
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);
   app.get('/maker', mid.requiresLogin, controllers.Post.makerPage);
-  app.get('/getUser', mid.requiresLogin, controllers.Account.getUser);
   app.post('/maker', mid.requiresLogin, controllers.Post.make);
   app.post('/passUpdate', mid.requiresLogin, controllers.Account.passUpdate);
   app.post('/deletePost', mid.requiresLogin, controllers.Post.deletePost);

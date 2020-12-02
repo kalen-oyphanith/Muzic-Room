@@ -37,7 +37,7 @@ const makePost = (req, res) => {
 
   const newPost = new Post.PostModel(postData);
 
-  const postPromise = newPost.save(); 
+  const postPromise = newPost.save();
 
   postPromise.then(() => res.json({
     redirect: '/maker',

@@ -26,7 +26,7 @@ const PostSchema = new mongoose.Schema({
     trim: true,
     set: setBlogPost,
   },
-    
+
   nickName: {
     type: String,
     trim: true,
