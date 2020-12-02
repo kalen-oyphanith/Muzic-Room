@@ -131,14 +131,19 @@ const PostList = function(props) {
             </div>
         );
     } 
-
+                  
     const postNodes = props.posts.map(function(post) {
+
+        // https://www.freecodecamp.org/news/javascript-date-now-how-to-get-the-current-date-in-javascript/
+        let today = new Date(post.createdDate);
+        let dayCreated = today.toLocaleDateString();        
+        
         return (
             <div key={post._id} className="post">
-                <h3> {post.heading} </h3>
-                <h1> {post.nickName} </h1>
-                <p> {post.blogPost} </p>              
-                <p> {post.createdDate}</p>
+                <h1> {post.username} </h1> 
+                <p> {dayCreated} </p> 
+                <h3 id="postHead"> {post.heading.replace(/&#x27;|&quot;/gi, "'")} </h3>
+                <p> {post.blogPost.replace(/&#x27;|&quot;/gi, "'")} </p> 
             </div> 
         );
     });
@@ -153,12 +158,19 @@ const PostList = function(props) {
 const FeedWindow = () => {
     return(
         <div>
-            <h1>Let's see what others are saying!</h1>
+            <h1>The Muzic Room</h1>
+            <p>Remember to be nice.</p>
         </div>
     );
 };
 
-const ProfileWindow = (props) => {
+const FeedTopWindow = () => {
+    return(
+        <p></p>
+    );
+};
+
+const ProfileWindow = () => {
     return (
         <div>
             <h1>My Profile</h1>
@@ -167,10 +179,17 @@ const ProfileWindow = (props) => {
 };
 
 const SettingsHeadingWindow = function(props) {
+    const postNodes = props.posts.map(function(post) {
+        return (
+            <div key={post._id} className="post">
+                <h1> {post.username} </h1>
+            </div>
+        );
+    });
+    
     return (
-        <div>                
-            <h1>Account Information</h1>
-            <p> Username: (username goes here)</p>
+        <div className="postList">
+            {postNodes}
         </div>
     );
 };
@@ -207,6 +226,11 @@ const createFeedWindow = (csrf) => {
     ReactDOM.render(
         <FeedWindow csrf={csrf} />,
         document.querySelector("#header")
+    );    
+    
+    ReactDOM.render(
+        <FeedTopWindow csrf={csrf} />,
+        document.querySelector("#makePost")
     );
     
     ReactDOM.render(
@@ -232,7 +256,7 @@ const createProfileWindow = (csrf) => {
 
 const createSettingsWindow = (csrf) => {
     ReactDOM.render(
-        <SettingsHeadingWindow csrf={csrf} />, 
+        <SettingsHeadingWindow posts={[]} />, 
         document.querySelector("#header")
     );          
     
@@ -297,7 +321,6 @@ const setup = function(csrf) {
         e.preventDefault();
         createProfileWindow(csrf);
         loadPostsFromServer();
-        loadUser();
         return false;
 
     });   

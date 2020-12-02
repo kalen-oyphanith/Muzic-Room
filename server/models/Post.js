@@ -27,7 +27,7 @@ const PostSchema = new mongoose.Schema({
     set: setBlogPost,
   },
 
-  nickName: {
+  username: {
     type: String,
     trim: true,
   },
@@ -46,7 +46,7 @@ const PostSchema = new mongoose.Schema({
 PostSchema.statics.toAPI = (doc) => ({
   heading: doc.heading,
   blogPost: doc.blogPost,
-  nickName: doc.nickName,
+  username: doc.username,
   createdDate: doc.createdDate,
 });
 
@@ -55,7 +55,7 @@ PostSchema.statics.findByOwner = (ownerId, callback) => {
     owner: convertId(ownerId),
   };
 
-  return PostModel.find(search).select('heading blogPost nickName createdDate').lean().exec(callback);
+  return PostModel.find(search).select('heading blogPost username createdDate').lean().exec(callback);
 };
 
 PostSchema.statics.deletePost = (ownerId, callback) => {

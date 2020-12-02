@@ -166,10 +166,15 @@ var PostList = function PostList(props) {
   }
 
   var postNodes = props.posts.map(function (post) {
+    // https://www.freecodecamp.org/news/javascript-date-now-how-to-get-the-current-date-in-javascript/
+    var today = new Date(post.createdDate);
+    var dayCreated = today.toLocaleDateString();
     return /*#__PURE__*/React.createElement("div", {
       key: post._id,
       className: "post"
-    }, /*#__PURE__*/React.createElement("h3", null, " ", post.heading, " "), /*#__PURE__*/React.createElement("h1", null, " ", post.nickName, " "), /*#__PURE__*/React.createElement("p", null, " ", post.blogPost, " "), /*#__PURE__*/React.createElement("p", null, " ", post.createdDate));
+    }, /*#__PURE__*/React.createElement("h1", null, " ", post.username, " "), /*#__PURE__*/React.createElement("p", null, " ", dayCreated, " "), /*#__PURE__*/React.createElement("h3", {
+      id: "postHead"
+    }, " ", post.heading.replace(/&#x27;|&quot;/gi, "'"), " "), /*#__PURE__*/React.createElement("p", null, " ", post.blogPost.replace(/&#x27;|&quot;/gi, "'"), " "));
   });
   return /*#__PURE__*/React.createElement("div", {
     className: "postList"
@@ -177,15 +182,27 @@ var PostList = function PostList(props) {
 };
 
 var FeedWindow = function FeedWindow() {
-  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", null, "Let's see what others are saying!"));
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", null, "The Muzic Room"), /*#__PURE__*/React.createElement("p", null, "Remember to be nice."));
 };
 
-var ProfileWindow = function ProfileWindow(props) {
+var FeedTopWindow = function FeedTopWindow() {
+  return /*#__PURE__*/React.createElement("p", null);
+};
+
+var ProfileWindow = function ProfileWindow() {
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", null, "My Profile"));
 };
 
 var SettingsHeadingWindow = function SettingsHeadingWindow(props) {
-  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", null, "Account Information"), /*#__PURE__*/React.createElement("p", null, " Username: (username goes here)"));
+  var postNodes = props.posts.map(function (post) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: post._id,
+      className: "post"
+    }, /*#__PURE__*/React.createElement("h1", null, " ", post.username, " "));
+  });
+  return /*#__PURE__*/React.createElement("div", {
+    className: "postList"
+  }, postNodes);
 };
 
 var PremiumWindow = function PremiumWindow() {
@@ -224,6 +241,9 @@ var createFeedWindow = function createFeedWindow(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(FeedWindow, {
     csrf: csrf
   }), document.querySelector("#header"));
+  ReactDOM.render( /*#__PURE__*/React.createElement(FeedTopWindow, {
+    csrf: csrf
+  }), document.querySelector("#makePost"));
   ReactDOM.render( /*#__PURE__*/React.createElement(PostList, {
     posts: []
   }), document.querySelector("#posts"));
@@ -243,7 +263,7 @@ var createProfileWindow = function createProfileWindow(csrf) {
 
 var createSettingsWindow = function createSettingsWindow(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(SettingsHeadingWindow, {
-    csrf: csrf
+    posts: []
   }), document.querySelector("#header"));
   ReactDOM.render( /*#__PURE__*/React.createElement(InfoForm, {
     csrf: csrf
@@ -296,7 +316,6 @@ var setup = function setup(csrf) {
     e.preventDefault();
     createProfileWindow(csrf);
     loadPostsFromServer();
-    loadUser();
     return false;
   });
   premiumButton.addEventListener("click", function (e) {

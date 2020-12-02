@@ -31,7 +31,7 @@ const makePost = (req, res) => {
     heading: req.body.heading,
     blogPost: req.body.blogPost,
     createdDate: req.body.createdDate,
-    nickName: req.session.account.username,
+    username: req.session.account.username,
     owner: req.session.account._id,
   };
 
