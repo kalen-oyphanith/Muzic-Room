@@ -31,9 +31,8 @@ const makePost = (req, res) => {
     heading: req.body.heading,
     blogPost: req.body.blogPost,
     createdDate: req.body.createdDate,
-    nickName: req.body.nickName,
+    nickName: req.session.account.username,
     owner: req.session.account._id,
-    username: req.session.account.username,
   };
 
   const newPost = new Post.PostModel(postData);

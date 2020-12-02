@@ -169,19 +169,11 @@ var PostList = function PostList(props) {
     return /*#__PURE__*/React.createElement("div", {
       key: post._id,
       className: "post"
-    }, /*#__PURE__*/React.createElement("h3", null, " ", post.heading, " "), /*#__PURE__*/React.createElement("p", null, " ", post.blogPost, " "), /*#__PURE__*/React.createElement("p", null, " ", post.createdDate));
+    }, /*#__PURE__*/React.createElement("h3", null, " ", post.heading, " "), /*#__PURE__*/React.createElement("h1", null, " ", post.nickName, " "), /*#__PURE__*/React.createElement("p", null, " ", post.blogPost, " "), /*#__PURE__*/React.createElement("p", null, " ", post.createdDate));
   });
   return /*#__PURE__*/React.createElement("div", {
     className: "postList"
   }, postNodes);
-};
-
-var loadUser = function loadUser() {
-  sendAjax('GET', '/getUser', null, function (data) {
-    ReactDOM.render( /*#__PURE__*/React.createElement(PostList, {
-      user: data.user
-    }), document.querySelector("#posts"));
-  });
 };
 
 var FeedWindow = function FeedWindow() {

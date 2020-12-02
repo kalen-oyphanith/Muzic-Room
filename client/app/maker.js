@@ -136,6 +136,7 @@ const PostList = function(props) {
         return (
             <div key={post._id} className="post">
                 <h3> {post.heading} </h3>
+                <h1> {post.nickName} </h1>
                 <p> {post.blogPost} </p>              
                 <p> {post.createdDate}</p>
             </div> 
@@ -147,14 +148,6 @@ const PostList = function(props) {
             {postNodes}
         </div>
     );
-};
-
-const loadUser = () => {
-    sendAjax('GET', '/getUser', null, (data) => {
-        ReactDOM.render(
-            <PostList user={data.user}/>, document.querySelector("#posts")
-        );
-    });
 };
 
 const FeedWindow = () => {
