@@ -10,7 +10,7 @@ const expressHandlebars = require('express-handlebars');
 const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
 const url = require('url');
-const redis = require('redis');
+const redis = require('redis'); // connects to redis
 const csrf = require('csurf');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
@@ -22,6 +22,7 @@ const mongooseOptions = {
   useUnifiedTopology: true,
 };
 
+// connect to mongoose
 mongoose.connect(dbURL, mongooseOptions, (err) => {
   if (err) {
     console.log('Could not connect to database');
@@ -45,6 +46,7 @@ const redisClient = redis.createClient({
   password: redisPASS,
 });
 
+// connect to our router
 const router = require('./router.js');
 
 const app = express();
@@ -76,6 +78,7 @@ app.engine('handlebars', expressHandlebars({
   defaultLayout: 'main',
 }));
 
+// creates our handle bars
 app.set('view engine', 'handlebars');
 
 app.set('views', `${__dirname}/../views`);

@@ -4,6 +4,7 @@ const {
   Post,
 } = models;
 
+// take all posts and display them
 const makerPage = (req, res) => {
   Post.PostModel.findByOwner(req.session.account._id, (err, docs) => {
     if (err) {
@@ -20,6 +21,7 @@ const makerPage = (req, res) => {
   });
 };
 
+//enables user to make posts
 const makePost = (req, res) => {
   if (!req.body.heading || !req.body.blogPost) {
     return res.status(400).json({
@@ -60,6 +62,7 @@ const makePost = (req, res) => {
   return postPromise;
 };
 
+// gets the posts from user
 const getPosts = (request, response) => {
   const req = request;
   const res = response;
@@ -78,6 +81,7 @@ const getPosts = (request, response) => {
   });
 };
 
+// gets all posts from user
 const getAllPosts = (request, response) => {
   const res = response;
 
@@ -94,8 +98,9 @@ const getAllPosts = (request, response) => {
   }).lean();
 };
 
-const deletePost = (req, res) => {
-  Post.PostModel.deletePost(req.session.account._id, (err) => {
+// delete all posts in user's account
+const deleteAll = (req, res) => {
+  Post.PostModel.deletePosts(req.session.account._id, (err) => {
     if (err) {
       return res.status(400).json({ error: 'An error occurred' });
     }
@@ -107,4 +112,4 @@ module.exports.makerPage = makerPage;
 module.exports.getPosts = getPosts;
 module.exports.getAllPosts = getAllPosts;
 module.exports.make = makePost;
-module.exports.deletePost = deletePost;
+module.exports.deleteAll = deleteAll;

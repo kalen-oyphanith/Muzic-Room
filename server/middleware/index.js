@@ -1,3 +1,4 @@
+// makes sure the user is logged in
 const requiresLogin = (req, res, next) => {
   if (!req.session.account) {
     return res.redirect('/');
@@ -6,6 +7,7 @@ const requiresLogin = (req, res, next) => {
   return next();
 };
 
+// makes sure functions occur when user is logged out
 const requiresLogout = (req, res, next) => {
   if (req.session.account) {
     return res.redirect('/maker');

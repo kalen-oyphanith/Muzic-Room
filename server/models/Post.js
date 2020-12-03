@@ -11,7 +11,7 @@ const convertId = mongoose.Types.ObjectId;
 const setHeading = (heading) => _.escape(heading).trim();
 const setBlogPost = (blogPost) => _.escape(blogPost).trim();
 
-// //// name = heading /////////    age = blogPost     ///////
+// Schema for my post/blogs user will be making
 const PostSchema = new mongoose.Schema({
   heading: {
     type: String,
@@ -30,7 +30,7 @@ const PostSchema = new mongoose.Schema({
   username: {
     type: String,
     trim: true,
-  },  
+  },
   nickName: {
     type: String,
     trim: true,
@@ -55,6 +55,7 @@ PostSchema.statics.toAPI = (doc) => ({
   createdDate: doc.createdDate,
 });
 
+//find owner
 PostSchema.statics.findByOwner = (ownerId, callback) => {
   const search = {
     owner: convertId(ownerId),
@@ -63,11 +64,12 @@ PostSchema.statics.findByOwner = (ownerId, callback) => {
   return PostModel.find(search).select('heading blogPost username nickName createdDate').lean().exec(callback);
 };
 
-PostSchema.statics.deletePost = (ownerId, callback) => {
+// deletes all user's posts
+PostSchema.statics.deletePosts = (ownerId, callback) => {
   const search = {
     owner: convertId(ownerId),
   };
-  return PostModel.deleteOne(search, callback);
+  return PostModel.deleteMany(search, callback);
 };
 
 PostModel = mongoose.model('Post', PostSchema);

@@ -1,8 +1,10 @@
+// handles login username and password
 const handleLogin = (e) => {
     e.preventDefault();
 
     $("#postMessage").animate({width: 'hide'}, 350);
     
+    //if user or pass is empty
     if ($("#user").val() == '' || $("#pass").val() == '') {
         handleError("Username or password is empty");
         return false;
@@ -10,11 +12,13 @@ const handleLogin = (e) => {
 
     console.log($("input[name=_csrf]").val());
 
+    //send request POST
     sendAjax('POST', $("#loginForm").attr("action"), $("#loginForm").serialize(), redirect);
 
     return false;
 };
 
+// handles signup username and password (check)
 const handleSignup = (e) => {
     e.preventDefault();
     
@@ -35,16 +39,17 @@ const handleSignup = (e) => {
     return false;
 };
  
-
+// home page describes the website's purpose
 const HomeWindow = (props) => {
     return ( 
         <div id="homePage">
             <h1 htmlFor="heading" id="homeHeading">Welcome to the Muzic Room</h1>
-            <p htmlFor="description" id="homeDescription">This is a music blog where muscians of any experience level can interact. Looking for some assistance? Just look at each other's post. Make sure to make an account if you don't have one! Remember what mama told you! If you have nothing nice to say, don't say it at all!</p>
+            <p htmlFor="description" id="homeDescription">This is a music blog where muscians of any experience level can interact. Looking for some assistance? Just look at each others post. Make sure to make an account if you don't have one! Remember what mama told you! If you have nothing nice to say, don't say it at all!</p>
         </div>
     );
 };
 
+// loginWindow Form allows user to login into the app
 const LoginWindow = (props) => {
     return ( 
         <form id = "loginForm" 
@@ -55,10 +60,11 @@ const LoginWindow = (props) => {
             className = "mainForm" 
         >
         <div id="homeInputs">
-            <label htmlFor="username">Username: </label>
+            <h1>Sign into The Muzic Room</h1>
+            <label htmlFor="username">Username:  </label>
             <input id="user" type="text" name="username" placeholder="username" />
             <br></br>
-            <label htmlFor="pass">Password:</label>
+            <label htmlFor="pass">Password:  </label>
             <input id="pass" type="password" name="pass" placeholder="password" />
             <input type="hidden" name="_csrf" value={props.csrf}/>
             <div id="signupButt">
@@ -70,6 +76,7 @@ const LoginWindow = (props) => {
     );
 };
 
+// signupWindow form allows user to sign in created user and password from inputs
 const SignupWindow = (props) => {
     return (
         <form id="signupForm"
@@ -80,6 +87,8 @@ const SignupWindow = (props) => {
             className="mainForm"
         >
         <div id="homeInputs">
+            
+            <h1>Join the Community</h1>
             <label htmlFor="username">Username: </label>
             <input id="user" type="text" name="username" placeholder="username" />
             <br></br>
@@ -99,6 +108,7 @@ const SignupWindow = (props) => {
     ); 
 };
 
+// gets posts from user
 const loadPostsFromServer = () => {
     sendAjax('GET', '/getAllPosts', null, (data) => {
         ReactDOM.render(
@@ -107,6 +117,7 @@ const loadPostsFromServer = () => {
     });
 };
 
+// created a render of the homeWindow
 const createHomeWindow = (csrf) => {
     ReactDOM.render(
         <HomeWindow csrf={csrf} />,
@@ -114,6 +125,7 @@ const createHomeWindow = (csrf) => {
     );
 };
 
+// created a render of the createLoginWindow
 const createLoginWindow = (csrf) => {
     ReactDOM.render(
         <LoginWindow csrf={csrf} />,
@@ -121,6 +133,7 @@ const createLoginWindow = (csrf) => {
     );
 };
 
+// created a render of the createSignupWindow
 const createSignupWindow = (csrf) => {
     ReactDOM.render(
         <SignupWindow csrf={csrf} />,
@@ -128,6 +141,7 @@ const createSignupWindow = (csrf) => {
     );
 };
 
+// .onclicks allow the tabs on page to show
 const setup = (csrf) => {
     const loginButton = document.querySelector("#loginButton");
     const signupButton = document.querySelector("#signupButton");
@@ -154,12 +168,14 @@ const setup = (csrf) => {
     createHomeWindow(csrf); //default view
 };
 
+// new token for session
 const getToken = () => {
     sendAjax('GET', '/getToken', null, (result) => {
         setup(result.csrfToken);
     });
 };
 
+// calls our token to setup page
 $(document).ready(function() {
     getToken();
 });

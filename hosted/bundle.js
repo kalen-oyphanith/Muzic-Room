@@ -22,6 +22,7 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
+// React components for the profile page
 var handlePost = function handlePost(e) {
   e.preventDefault();
   $("#postMessage").animate({
@@ -38,7 +39,8 @@ var handlePost = function handlePost(e) {
   });
   alert("You made a new post!");
   return false;
-};
+}; // handles the update function for the password change
+
 
 var handleUpdate = function handleUpdate(e) {
   e.preventDefault();
@@ -59,26 +61,7 @@ var handleUpdate = function handleUpdate(e) {
   alert("You have changed your password");
   sendAjax('POST', $("#settingsForm").attr("action"), $("#settingsForm").serialize(), redirect);
   return false;
-}; //
-//const handleInfo = (e) => {
-//    e.preventDefault();
-//    
-////    $("#postMessage").animate({width:'hide'}, 350);
-//    
-//    if($("#pass").val() == '' || $("#pass2").val() == '') {
-//        handleError("All fields are required to update profile");
-//        return false;
-//    }
-//    
-//    if($("#pass").val() !== $("#pass2").val()){
-//        handleError("Passwords do not match");
-//        return false;
-//    }
-//    
-//    sendAjax('POST', $("#infoForm").attr("action"), $("#infoForm").serialize(), redirect);
-//    
-//    return false;
-//};
+}; // form for user to fill out their blog posts
 
 
 var PostForm = function PostForm(props) {
@@ -118,27 +101,11 @@ var PostForm = function PostForm(props) {
     value: props.csrf
   }), /*#__PURE__*/React.createElement("input", {
     id: "postButton",
-    className: "makePostSubmit",
+    className: "formSubmit",
     type: "submit",
     value: "Make Post"
   }));
-}; //const InfoForm = (props) => {
-//    return (
-//        <form id="infoForm"
-//            onSubmit={handleInfo}
-//            name="settingsForm"
-//            action="/passUpdate"
-//            method="POST"
-//            className="infoForm"
-//        >
-//            <input type="hidden" name="_csrf" value={props.csrf} />
-//            <input className="formSubmit" type="submit" value="Update" />
-//        </form> 
-//    );
-//};
-//            <label htmlFor="bio">Bio: </label>
-//            <textarea rows="2" cols="40" id="postBio" type="text" name="bio" placeholder="Write something about yourself! Do you play an instrument? Preferences in music..."></textarea>
-//            <br></br>
+}; //settings form to change their password
 
 
 var SettingsForm = function SettingsForm(props) {
@@ -170,7 +137,30 @@ var SettingsForm = function SettingsForm(props) {
     type: "submit",
     value: "Update"
   }));
-};
+}; // enables users to delete all their posts
+
+
+var DeleteForm = function DeleteForm(props) {
+  return /*#__PURE__*/React.createElement("form", {
+    id: "deleteForm",
+    name: "deleteForm",
+    action: "/deletePosts",
+    method: "POST",
+    className: "deleteForm"
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "hidden",
+    name: "_csrf",
+    value: props.csrf
+  }), /*#__PURE__*/React.createElement("input", {
+    id: "deleteButton",
+    className: "formSubmit",
+    type: "button",
+    name: "deleteButton",
+    value: "Delete Posts",
+    onClick: deleteAll
+  }));
+}; // displays the user's posts in divs
+
 
 var PostList = function PostList(props) {
   if (props.posts.length === 0) {
@@ -189,33 +179,38 @@ var PostList = function PostList(props) {
     return /*#__PURE__*/React.createElement("div", {
       key: post._id,
       className: "post"
-    }, /*#__PURE__*/React.createElement("h2", null, " ", /*#__PURE__*/React.createElement("img", {
+    }, /*#__PURE__*/React.createElement("img", {
       src: "/assets/img/userFace.png",
       alt: "pfp"
-    }), " ", post.username, " "), /*#__PURE__*/React.createElement("p", null, " ", dayCreated, " "), /*#__PURE__*/React.createElement("h3", {
+    }), /*#__PURE__*/React.createElement("h2", {
+      id: "username"
+    }, "@", post.username, " "), /*#__PURE__*/React.createElement("p", null, " ", post.nickName, " "), /*#__PURE__*/React.createElement("h3", {
       id: "postHead"
-    }, " ", post.heading.replace(/&#x27;|&quot;/gi, "'"), " "), /*#__PURE__*/React.createElement("p", null, " ", post.blogPost.replace(/&#x27;|&quot;/gi, "'"), " "), /*#__PURE__*/React.createElement("p", null, " ", post.nickName, " "));
+    }, " ", post.heading.replace(/&#x27;|&quot;/gi, "'"), " "), /*#__PURE__*/React.createElement("p", null, " ", post.blogPost.replace(/&#x27;|&quot;/gi, "'"), " "), /*#__PURE__*/React.createElement("p", null, " ", dayCreated, " "));
   });
-  return /*#__PURE__*/React.createElement("div", {
-    className: "postList"
-  }, postNodes);
-};
+  return /*#__PURE__*/React.createElement("div", null, postNodes);
+}; // the header of feed window
+
 
 var FeedWindow = function FeedWindow() {
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", null, "The Muzic Room"), /*#__PURE__*/React.createElement("p", null, "Here's what other people are saying!"));
-};
+}; // clear window to substitute others
 
-var FeedTopWindow = function FeedTopWindow() {
+
+var ClearWindow = function ClearWindow() {
   return /*#__PURE__*/React.createElement("p", null);
-};
+}; //profile window to display heading
+
 
 var ProfileWindow = function ProfileWindow() {
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", null, "My Profile"));
-};
+}; // displays heading
+
 
 var SettingsHeadingWindow = function SettingsHeadingWindow(props) {
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", null, "My Account"));
-};
+}; // PremButton enable the music to be hidden then shown 
+
 
 var PremButton = /*#__PURE__*/function (_React$Component) {
   _inherits(PremButton, _React$Component);
@@ -240,13 +235,15 @@ var PremButton = /*#__PURE__*/function (_React$Component) {
       this.setState({
         hidden: !this.state.hidden
       });
-    }
+    } // renders the images
+
   }, {
     key: "render",
     value: function render() {
       var grid = this.state.hidden ? "hidden" : "show";
       return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("input", {
         id: "subscribeButton",
+        className: "formSubmit",
         type: "submit",
         onClick: this.changeVis.bind(this),
         value: "Subscribe"
@@ -276,11 +273,13 @@ var PremButton = /*#__PURE__*/function (_React$Component) {
   }]);
 
   return PremButton;
-}(React.Component);
+}(React.Component); // header for the window
+
 
 var PremiumWindow = function PremiumWindow() {
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", null, "Get Your Sheet Music!"), /*#__PURE__*/React.createElement("p", null, "Learn more songs quickly with our sheet music provided!"));
-};
+}; // breaks if i dont remove
+
 
 var PremiumBodyWindow = function PremiumBodyWindow() {
   return /*#__PURE__*/React.createElement("div", {
@@ -304,23 +303,20 @@ var PremiumBodyWindow = function PremiumBodyWindow() {
     src: "/assets/img/sheet_6.jpg",
     alt: "Sheet Music"
   }));
-};
+}; // creates the feed window with all the posts
 
-var PremiumPostSection = function PremiumPostSection() {
-  return /*#__PURE__*/React.createElement("p", null);
-};
 
 var createFeedWindow = function createFeedWindow(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(FeedWindow, {
     csrf: csrf
   }), document.querySelector("#header"));
-  ReactDOM.render( /*#__PURE__*/React.createElement(FeedTopWindow, {
-    csrf: csrf
-  }), document.querySelector("#makePost"));
+  ReactDOM.render( /*#__PURE__*/React.createElement(ClearWindow, null), document.querySelector("#deleteAllPosts"));
+  ReactDOM.render( /*#__PURE__*/React.createElement(ClearWindow, null), document.querySelector("#makePost"));
   ReactDOM.render( /*#__PURE__*/React.createElement(PostList, {
     posts: []
   }), document.querySelector("#posts"));
-};
+}; //creates the user's profile with the makePost on page
+
 
 var createProfileWindow = function createProfileWindow(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(ProfileWindow, {
@@ -332,23 +328,30 @@ var createProfileWindow = function createProfileWindow(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(PostList, {
     posts: []
   }), document.querySelector("#posts"));
-};
+  ReactDOM.render( /*#__PURE__*/React.createElement(DeleteForm, {
+    csrf: csrf
+  }), document.querySelector("#deleteAllPosts"));
+}; // creates the settings window 
+
 
 var createSettingsWindow = function createSettingsWindow(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(SettingsHeadingWindow, null), document.querySelector("#header"));
-  ReactDOM.render( /*#__PURE__*/React.createElement(PremiumPostSection, {
+  ReactDOM.render( /*#__PURE__*/React.createElement(ClearWindow, null), document.querySelector("#deleteAllPosts"));
+  ReactDOM.render( /*#__PURE__*/React.createElement(ClearWindow, {
     csrf: csrf
   }), document.querySelector("#makePost"));
   ReactDOM.render( /*#__PURE__*/React.createElement(SettingsForm, {
     csrf: csrf
   }), document.querySelector("#posts"));
-};
+}; //creates the premium window
+
 
 var createPremiumWindow = function createPremiumWindow(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(PremiumWindow, {
     csrf: csrf
   }), document.querySelector("#header"));
-  ReactDOM.render( /*#__PURE__*/React.createElement(PremiumPostSection, {
+  ReactDOM.render( /*#__PURE__*/React.createElement(ClearWindow, null), document.querySelector("#deleteAllPosts"));
+  ReactDOM.render( /*#__PURE__*/React.createElement(ClearWindow, {
     csrf: csrf
   }), document.querySelector("#makePost"));
   ReactDOM.render( /*#__PURE__*/React.createElement(PremiumBodyWindow, {
@@ -359,7 +362,13 @@ var createPremiumWindow = function createPremiumWindow(csrf) {
   document.querySelector('#subscribeButton').onclick = function () {
     this.disabled = true;
   };
-};
+}; // request to delete all posts
+
+
+var deleteAll = function deleteAll(e) {
+  sendAjax('POST', $("#deleteForm").attr("action"), $("#deleteForm").serialize(), loadPostsFromServer());
+}; //loads all posts from server
+
 
 var loadAllPostsFromServer = function loadAllPostsFromServer() {
   sendAjax('GET', '/getAllPosts', null, function (data) {
@@ -367,7 +376,8 @@ var loadAllPostsFromServer = function loadAllPostsFromServer() {
       posts: data.posts
     }), document.querySelector("#posts"));
   });
-};
+}; // loads posts form server
+
 
 var loadPostsFromServer = function loadPostsFromServer() {
   sendAjax('GET', '/getPosts', null, function (data) {
@@ -375,7 +385,8 @@ var loadPostsFromServer = function loadPostsFromServer() {
       posts: data.posts
     }), document.querySelector("#posts"));
   });
-};
+}; // onclick to add functionality to tabs
+
 
 var setup = function setup(csrf) {
   var feedButton = document.querySelector("#allPostsButton");
@@ -406,7 +417,8 @@ var setup = function setup(csrf) {
   });
   loadAllPostsFromServer();
   createFeedWindow(csrf);
-};
+}; //creates uniqure sessions
+
 
 var getToken = function getToken() {
   sendAjax("GET", '/getToken', null, function (result) {
@@ -419,19 +431,22 @@ $(document).ready(function () {
 });
 "use strict";
 
+// displays handle error function
 var handleError = function handleError(message) {
   $("#errorMessage").text(message);
   $("#postMessage").animate({
     width: 'toggle'
   }, 350);
-};
+}; // redirects page
+
 
 var redirect = function redirect(response) {
   $("#postMessage").animate({
     width: 'hide'
   }, 350);
   window.location = response.redirect;
-};
+}; // sending requests
+
 
 var sendAjax = function sendAjax(type, action, data, success) {
   $.ajax({

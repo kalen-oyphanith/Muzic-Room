@@ -1,3 +1,9 @@
+/*
+font-family: 'Oswald', sans-serif;
+font-family: 'Source Sans Pro', sans-serif;
+*/
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Source+Sans+Pro:wght@300&display=swap');
+
 html, body {
     height: 100%;
     width: 100%;
@@ -8,7 +14,7 @@ html, body {
 
 #logo {
     height: 40px;
-    width: 40;
+    width: 40px;
     padding-top: 5px;
     float:left;
     border-radius: 8px;
@@ -19,6 +25,7 @@ html, body {
   position: relative;
   overflow: hidden;
   background-color: #333;
+  font-family: 'Oswald', sans-serif;
 }
 
 .topnav a {
@@ -28,6 +35,7 @@ html, body {
   padding: 14px 16px;
   text-decoration: none;
   font-size: 17px;
+    letter-spacing: 2px;
 }
 
 .topnav-centered a {
@@ -58,11 +66,13 @@ a:hover {
 #homeHeading {
     padding-top: 2%;
     font-size: 3.5em;
+    font-family: 'Oswald', sans-serif;
 }
 
 #homeDescription{
     padding: 1% 30%;
     font-size: 1.5em; 
+    font-family: 'Source Sans Pro', sans-serif;
 }
 
 #makePost, #posts, #header{
@@ -75,19 +85,22 @@ a:hover {
 
 .formSubmit{
 	border-radius: 20px;
-	border: 1px solid #FF4B2B;
-	background-color: #FF4B2B;
-	color: #FFFFFF;
-	font-size: 12px;
-	font-weight: bold;
+	background-color: #351D66;
+	color: #D8E5E5;
+	font-size: 1em;
 	padding: 12px 45px;
-	letter-spacing: 1px;
+	letter-spacing: 5px;
 	text-transform: uppercase;
 	transition: transform 80ms ease-in;
     text-align: center;
     left: 20%;
-
+    font-family: 'Oswald', sans-serif;
 }
+
+#signupButt{
+    padding-top: 2%;
+}
+
 .makePostSubmit {
     transition: background-color 0.4s ease;
     display: inline;
@@ -121,6 +134,7 @@ a:hover {
     z-index: 200;
     right: 0px;
     overflow: hidden;
+    font-family: 'Oswald', sans-serif;
 }
 
 #postMessage h3 {
@@ -128,12 +142,14 @@ a:hover {
     position: absolute;
     top: 0px;
     left: 20px;
+    font-family: 'Oswald', sans-serif;
 }
 
 #errorMessage {
     font-size: 1.2em;
     font-weight: bold;
     color: #FF5656;
+    font-family: 'Oswald', sans-serif;
 }
 
 #post {
@@ -149,6 +165,7 @@ a:hover {
 
 #header {
     text-align: center;
+    font-family: 'Source Sans Pro', sans-serif;
 }
 
 #posts {
@@ -162,7 +179,7 @@ a:hover {
     margin: 0 auto;
     margin-top: 2px;
     margin-bottom: 2px;
-    background-color: #E3E3E3;
+    background-color: #ECF0F1;
     padding: 10px;
     min-height:60px;
     overflow: hidden;
@@ -189,13 +206,25 @@ img{
 
 h1{
     font-size: 3em;
+    font-family: 'Oswald', sans-serif;
+}
+
+
+input:focus {
+  border-color: green
 }
 
 input{
   width: 13%;
   padding: 12px 20px;
   margin: 8px 0;
-  box-sizing: border-box;
+/*  box-sizing: border-box;*/
+  font-family: 'Oswald', sans-serif;
+  outline: 0;
+  border-width: 0 0 2px;
+  border-color: blue;
+  font-size: 1.1em;
+
 }
 
 #makePost input, #posts input, #header input{
@@ -203,6 +232,7 @@ input{
   padding: 12px 20px;
   margin: 8px 0;
   box-sizing: border-box;
+  font-family: 'Oswald', sans-serif;
 }
 
 #homeInputs{
@@ -219,6 +249,7 @@ textarea {
   border-radius: 4px;
   background-color: #f8f8f8;
   resize: none;
+  font-family: 'Source Sans Pro', sans-serif;
 }
 
 .hidden {
@@ -231,4 +262,49 @@ textarea {
 
 #subscribeButton button{
     font-size: .5em;
+    font-family: 'Oswald', sans-serif;
+}
+
+#deleteButton{
+    position: relative;
+    bottom: 15px;
+/*    padding-left: 30%;*/
+    
+}
+
+label{
+    color: #1f1c1a;
+    font-size: 1.2em;
+    font-family: 'Oswald', sans-serif;
+}
+footer{
+    position: relative;
+    top:50%;
+    text-align: center;
+    font-size: .9em;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+::placeholder{
+    color: #A99DF3;
+}
+
+#username {
+    font-family: 'Oswald', sans-serif;
+
+}
+
+#postDate {
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+#postHead{
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+#postBlogPost{
+    font-family: 'Source Sans Pro', sans-serif;
+}
+#postNickName{
+    font-family: 'Source Sans Pro', sans-serif;
 }

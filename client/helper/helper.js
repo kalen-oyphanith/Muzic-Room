@@ -1,13 +1,16 @@
+// displays handle error function
 const handleError = (message) => {
     $("#errorMessage").text(message);
     $("#postMessage").animate({width: 'toggle'}, 350);
 };
 
+// redirects page
 const redirect = (response) => {
     $("#postMessage").animate({width: 'hide'}, 350);
     window.location = response.redirect;
 };
 
+// sending requests
 const sendAjax = (type, action, data, success) => {
     $.ajax({
         cache: false,

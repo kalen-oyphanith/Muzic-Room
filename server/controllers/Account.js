@@ -4,17 +4,20 @@ const {
   Account,
 } = models;
 
+// renders the login page
 const loginPage = (req, res) => {
   res.render('login', {
     csrfToken: req.csrfToken(),
   });
 };
 
+// renders logout page
 const logout = (req, res) => {
   req.session.destroy();
   res.redirect('/');
 };
 
+// enables user to login
 const login = (request, response) => {
   const req = request;
   const res = response;
@@ -44,6 +47,7 @@ const login = (request, response) => {
   });
 };
 
+// enables user to signup
 const signup = (request, response) => {
   const req = request;
   const res = response;
@@ -99,6 +103,7 @@ const signup = (request, response) => {
   });
 };
 
+//updates password in the settings of the app
 const passUpdate = (request, response) => {
   const req = request;
   const res = response;
@@ -140,6 +145,7 @@ const passUpdate = (request, response) => {
   });
 };
 
+// gets a unique token for the user's session
 const getToken = (request, response) => {
   const req = request;
   const res = response;

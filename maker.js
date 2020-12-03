@@ -1,4 +1,4 @@
-// React components for the profile page
+newer version
 const handlePost = (e) => {
     e.preventDefault();
     
@@ -19,7 +19,6 @@ const handlePost = (e) => {
     return false;
 };
 
-// handles the update function for the password change
 const handleUpdate = (e) => {
     e.preventDefault();
     
@@ -41,7 +40,6 @@ const handleUpdate = (e) => {
     return false;
 };
 
-// form for user to fill out their blog posts
 const PostForm = (props) => {
     return (
         <form id="postForm"
@@ -63,12 +61,11 @@ const PostForm = (props) => {
             <textarea rows="5" cols="40" id="postBlogPost" type="text" name="blogPost" placeholder="write a post!"></textarea>
 
             <input type="hidden" name="_csrf" value={props.csrf} />
-            <input id="postButton" className="formSubmit" type="submit" value="Make Post" />
+            <input id="postButton" className="makePostSubmit" type="submit" value="Make Post" />
         </form>
     );
 };
 
-//settings form to change their password
 const SettingsForm = (props) => {
     return (
         <form id="settingsForm"
@@ -91,7 +88,6 @@ const SettingsForm = (props) => {
     );
 };
 
-// enables users to delete all their posts
 const DeleteForm = (props) => {
   return (
     <form id="deleteForm" 
@@ -101,16 +97,15 @@ const DeleteForm = (props) => {
       className="deleteForm"
       >
           <input type="hidden" name="_csrf" value={props.csrf} />
-          <input id="deleteButton" className="formSubmit" type="button" name="deleteButton" value="Delete Posts" onClick={deleteAll} />
+          <input id="deleteBtn" type="button" name="deleteBtn" value="Delete All Posts" onClick={deleteAll} />
     </form>
   );  
 };
 
-// displays the user's posts in divs
 const PostList = function(props) {    
     if(props.posts.length === 0) {
         return(
-            <div className="postList">
+            <div>
                 <h3 className="emptyPost">No Posts yet</h3>
             </div>
         );
@@ -121,15 +116,14 @@ const PostList = function(props) {
         // https://www.freecodecamp.org/news/javascript-date-now-how-to-get-the-current-date-in-javascript/
         let today = new Date(post.createdDate);
         let dayCreated = today.toLocaleDateString();        
-        console.log(posts);
+
         return (
             <div key={post._id} className="post">
-                <img src="/assets/img/userFace.png" alt="pfp" />
-                <h2 id="username">@{post.username} </h2>
-                <p> {post.nickName} </p>
+                <h2> <img src="/assets/img/userFace.png" alt="pfp" /> {post.username} </h2> 
+                <p> {dayCreated} </p> 
                 <h3 id="postHead"> {post.heading.replace(/&#x27;|&quot;/gi, "'")} </h3>
                 <p> {post.blogPost.replace(/&#x27;|&quot;/gi, "'")} </p> 
-                <p> {dayCreated} </p> 
+                <p> {post.nickName} </p> 
             </div> 
         );
     });
@@ -141,7 +135,6 @@ const PostList = function(props) {
     );
 };
 
-// the header of feed window
 const FeedWindow = () => {
     return(
         <div>
@@ -151,14 +144,12 @@ const FeedWindow = () => {
     );
 };
 
-// clear window to substitute others
 const ClearWindow = () => {
     return(
         <p></p>
     );
 };
 
-//profile window to display heading
 const ProfileWindow = () => {
     return (
         <div>
@@ -167,7 +158,6 @@ const ProfileWindow = () => {
     );
 };
 
-// displays heading
 const SettingsHeadingWindow = function(props) {
     return (
         <div>
@@ -175,8 +165,6 @@ const SettingsHeadingWindow = function(props) {
         </div>
     );
 };
-
-// PremButton enable the music to be hidden then shown 
 class PremButton extends React.Component {
   constructor(){
          super();
@@ -190,12 +178,12 @@ class PremButton extends React.Component {
         this.setState({hidden: !this.state.hidden})
     }
     
-    // renders the images
+    
     render(){
         let grid = this.state.hidden ? "hidden" : "show";
         return(
             <div>
-                <input id="subscribeButton" className="formSubmit" type="submit" onClick={this.changeVis.bind(this)} value="Subscribe"/>
+                <input id="subscribeButton" type="submit" onClick={this.changeVis.bind(this)} value="Subscribe"/>
                 
                 <span id="gridContainer" className={grid}>
                 <img src="/assets/img/sheet_1.png" alt="Sheet Music" />
@@ -210,7 +198,6 @@ class PremButton extends React.Component {
     };
 }
 
-// header for the window
 const PremiumWindow = () => {
     return (
         <div>                
@@ -220,7 +207,6 @@ const PremiumWindow = () => {
     ); 
 };
 
-// breaks if i dont remove
 const PremiumBodyWindow = () => {   
     return(
         <div id="gridContainer">
@@ -234,7 +220,6 @@ const PremiumBodyWindow = () => {
     );
 };
 
-// creates the feed window with all the posts
 const createFeedWindow = (csrf) => {
     ReactDOM.render(
         <FeedWindow csrf={csrf} />,
@@ -242,12 +227,12 @@ const createFeedWindow = (csrf) => {
     );    
     
     ReactDOM.render(
-        <ClearWindow/>,
+        <ClearWindow csrf={csrf} />,
         document.querySelector("#deleteAllPosts")
     );    
     
     ReactDOM.render(
-        <ClearWindow/>,
+        <ClearWindow csrf={csrf} />,
         document.querySelector("#makePost")
     );
     
@@ -257,7 +242,6 @@ const createFeedWindow = (csrf) => {
     );
 };
 
-//creates the user's profile with the makePost on page
 const createProfileWindow = (csrf) => {
     ReactDOM.render(
         <ProfileWindow csrf={csrf} />, 
@@ -270,22 +254,21 @@ const createProfileWindow = (csrf) => {
     ReactDOM.render(
         <PostList posts={[]} />, document.querySelector("#posts")
     );
-    
+     
     ReactDOM.render(
         <DeleteForm csrf={csrf} />, document.querySelector("#deleteAllPosts")
     );
 };
 
-// creates the settings window 
 const createSettingsWindow = (csrf) => {
     ReactDOM.render(
         <SettingsHeadingWindow />, document.querySelector("#header")
     );
-    
+       
     ReactDOM.render(
-        <ClearWindow/>,
+        <ClearWindow csrf={csrf} />, 
         document.querySelector("#deleteAllPosts")
-    );   
+    );     
     
     ReactDOM.render(
         <ClearWindow csrf={csrf} />, 
@@ -298,7 +281,6 @@ const createSettingsWindow = (csrf) => {
     );               
 };
 
-//creates the premium window
 const createPremiumWindow = (csrf) => {
     ReactDOM.render(
         <PremiumWindow csrf={csrf} />, 
@@ -306,13 +288,13 @@ const createPremiumWindow = (csrf) => {
     );       
     
     ReactDOM.render(
-        <ClearWindow/>,
-        document.querySelector("#deleteAllPosts")
-    );   
+        <ClearWindow csrf={csrf} />, 
+        document.querySelector("#makePost")
+    );       
     
     ReactDOM.render(
         <ClearWindow csrf={csrf} />, 
-        document.querySelector("#makePost")
+        document.querySelector("#deleteAllPosts")
     );         
     
     ReactDOM.render(
@@ -330,12 +312,10 @@ const createPremiumWindow = (csrf) => {
     }
 };
 
-// request to delete all posts
 const deleteAll = (e) => {
     sendAjax('POST', $("#deleteForm").attr("action"), $("#deleteForm").serialize(), loadPostsFromServer());
 };
 
-//loads all posts from server
 const loadAllPostsFromServer = () => {
     sendAjax('GET', '/getAllPosts', null, (data) => {
         ReactDOM.render(
@@ -344,7 +324,6 @@ const loadAllPostsFromServer = () => {
     });
 };
 
-// loads posts form server
 const loadPostsFromServer = () => {
     sendAjax('GET', '/getPosts', null, (data) => {
         ReactDOM.render(
@@ -353,7 +332,6 @@ const loadPostsFromServer = () => {
     });
 };
 
-// onclick to add functionality to tabs
 const setup = function(csrf) {
     const feedButton = document.querySelector("#allPostsButton");
     const profileButton = document.querySelector("#profileButton");
@@ -392,7 +370,6 @@ const setup = function(csrf) {
     createFeedWindow(csrf);
 };
 
-//creates uniqure sessions
 const getToken = () => {
     sendAjax("GET", '/getToken', null, (result) => {
         setup(result.csrfToken);
