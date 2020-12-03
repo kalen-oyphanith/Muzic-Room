@@ -180,11 +180,15 @@ a:hover {
   flex-wrap: wrap;
   justify-content: space-around;
   padding-left: 0;
-  width: 30%;
+  width: 40%;
 }
 
 img{
     width:10%;
+}
+
+h1{
+    font-size: 3em;
 }
 
 input{
@@ -217,4 +221,14 @@ textarea {
   resize: none;
 }
 
+.hidden {
+ visibility: hidden;
+}
 
+.show {
+ visibility: visible;
+}
+
+#subscribeButton button{
+    font-size: .5em;
+}

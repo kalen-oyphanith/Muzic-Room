@@ -12,6 +12,9 @@ const handlePost = (e) => {
         loadPostsFromServer();
     });
     
+    alert("You made a new post!");
+
+    
     return false;
 };
 
@@ -29,31 +32,32 @@ const handleUpdate = (e) => {
         handleError("Passwords do not match");
         return false;
     }
-    
+    alert("You have changed your password");
+
     sendAjax('POST', $("#settingsForm").attr("action"), $("#settingsForm").serialize(), redirect);
     
     return false;
 };
-
-const handleInfo = (e) => {
-    e.preventDefault();
-    
-//    $("#postMessage").animate({width:'hide'}, 350);
-    
-    if($("#pass").val() == '' || $("#pass2").val() == '') {
-        handleError("All fields are required to update profile");
-        return false;
-    }
-    
-    if($("#pass").val() !== $("#pass2").val()){
-        handleError("Passwords do not match");
-        return false;
-    }
-    
-    sendAjax('POST', $("#infoForm").attr("action"), $("#infoForm").serialize(), redirect);
-    
-    return false;
-};
+//
+//const handleInfo = (e) => {
+//    e.preventDefault();
+//    
+////    $("#postMessage").animate({width:'hide'}, 350);
+//    
+//    if($("#pass").val() == '' || $("#pass2").val() == '') {
+//        handleError("All fields are required to update profile");
+//        return false;
+//    }
+//    
+//    if($("#pass").val() !== $("#pass2").val()){
+//        handleError("Passwords do not match");
+//        return false;
+//    }
+//    
+//    sendAjax('POST', $("#infoForm").attr("action"), $("#infoForm").serialize(), redirect);
+//    
+//    return false;
+//};
 
 const PostForm = (props) => {
     return (
@@ -68,6 +72,10 @@ const PostForm = (props) => {
             <input id="postHeading" type="text" name="heading" placeholder="Heading" /> 
             <br></br>
             
+            <label htmlFor="nickName">Name: </label>
+            <input id="nickName" type="text" name="nickName" placeholder="Nick name (optional)" />   
+            <br></br>
+            
             <label htmlFor="blogPost">Post: </label>
             <textarea rows="5" cols="40" id="postBlogPost" type="text" name="blogPost" placeholder="write a post!"></textarea>
 
@@ -77,29 +85,24 @@ const PostForm = (props) => {
     );
 };
 
-const InfoForm = (props) => {
-    return (
-        <form id="infoForm"
-            onSubmit={handleInfo}
-            name="settingsForm"
-            action="/passUpdate"
-            method="POST"
-            className="infoForm"
-        >
-            <label htmlFor="nickName">Name: </label>
-            <input id="nickName" type="text" name="nickName" placeholder="Your name" />   
-            <br></br>
+//const InfoForm = (props) => {
+//    return (
+//        <form id="infoForm"
+//            onSubmit={handleInfo}
+//            name="settingsForm"
+//            action="/passUpdate"
+//            method="POST"
+//            className="infoForm"
+//        >
+//            <input type="hidden" name="_csrf" value={props.csrf} />
+//            <input className="formSubmit" type="submit" value="Update" />
+//        </form> 
+//    );
+//};
 
-            <label htmlFor="bio">Bio: </label>
-            <textarea rows="2" cols="40" id="postBio" type="text" name="bio" placeholder="Write something about yourself! Do you play an instrument? Preferences in music..."></textarea>
-            <br></br>
-            <br></br>
-            
-            <input type="hidden" name="_csrf" value={props.csrf} />
-            <input className="formSubmit" type="submit" value="Update" />
-        </form> 
-    );
-}
+//            <label htmlFor="bio">Bio: </label>
+//            <textarea rows="2" cols="40" id="postBio" type="text" name="bio" placeholder="Write something about yourself! Do you play an instrument? Preferences in music..."></textarea>
+//            <br></br>
 
 const SettingsForm = (props) => {
     return (
@@ -137,13 +140,14 @@ const PostList = function(props) {
         // https://www.freecodecamp.org/news/javascript-date-now-how-to-get-the-current-date-in-javascript/
         let today = new Date(post.createdDate);
         let dayCreated = today.toLocaleDateString();        
-        
+        console.log(posts);
         return (
             <div key={post._id} className="post">
-                <h1> {post.username} </h1> 
+                <h2> <img src="/assets/img/userFace.png" alt="pfp" /> {post.username} </h2> 
                 <p> {dayCreated} </p> 
                 <h3 id="postHead"> {post.heading.replace(/&#x27;|&quot;/gi, "'")} </h3>
                 <p> {post.blogPost.replace(/&#x27;|&quot;/gi, "'")} </p> 
+                <p> {post.nickName} </p> 
             </div> 
         );
     });
@@ -159,7 +163,7 @@ const FeedWindow = () => {
     return(
         <div>
             <h1>The Muzic Room</h1>
-            <p>Remember to be nice.</p>
+            <p>Here's what other people are saying!</p>
         </div>
     );
 };
@@ -179,20 +183,44 @@ const ProfileWindow = () => {
 };
 
 const SettingsHeadingWindow = function(props) {
-    const postNodes = props.posts.map(function(post) {
-        return (
-            <div key={post._id} className="post">
-                <h1> {post.username} </h1>
-            </div>
-        );
-    });
-    
     return (
-        <div className="postList">
-            {postNodes}
+        <div>
+            <h1>My Account</h1>
         </div>
     );
 };
+class PremButton extends React.Component {
+  constructor(){
+         super();
+
+         this.state = {
+              hidden: true
+         }
+    }
+
+    changeVis(){
+        this.setState({hidden: !this.state.hidden})
+    }
+    
+    
+    render(){
+        let grid = this.state.hidden ? "hidden" : "show";
+        return(
+            <div>
+                <input id="subscribeButton" type="submit" onClick={this.changeVis.bind(this)} value="Subscribe"/>
+                
+                <span id="gridContainer" className={grid}>
+                <img src="/assets/img/sheet_1.png" alt="Sheet Music" />
+                <img src="/assets/img/sheet_2.jpg" alt="Sheet Music" />
+                <img src="/assets/img/sheet_3.png" alt="Sheet Music" />
+                <img src="/assets/img/sheet_4.jpg" alt="Sheet Music" />
+                <img src="/assets/img/sheet_5.jpg" alt="Sheet Music" />
+                <img src="/assets/img/sheet_6.jpg" alt="Sheet Music" />
+                </span>
+            </div>
+        );
+    };
+}
 
 const PremiumWindow = () => {
     return (
@@ -200,7 +228,7 @@ const PremiumWindow = () => {
             <h1>Get Your Sheet Music!</h1>
             <p>Learn more songs quickly with our sheet music provided!</p>
         </div>  
-    );
+    ); 
 };
 
 const PremiumBodyWindow = () => {   
@@ -217,8 +245,8 @@ const PremiumBodyWindow = () => {
 };
 
 const PremiumPostSection = () => {
-    return(
-        <p></p>        
+    return (
+        <p></p>
     );
 };
 
@@ -251,17 +279,15 @@ const createProfileWindow = (csrf) => {
     ReactDOM.render(
         <PostList posts={[]} />, document.querySelector("#posts")
     );
-
 };
 
 const createSettingsWindow = (csrf) => {
     ReactDOM.render(
-        <SettingsHeadingWindow posts={[]} />, 
-        document.querySelector("#header")
-    );          
-    
+        <SettingsHeadingWindow />, document.querySelector("#header")
+    );
+       
     ReactDOM.render(
-        <InfoForm csrf={csrf} />, 
+        <PremiumPostSection csrf={csrf} />, 
         document.querySelector("#makePost")
     );          
     
@@ -286,6 +312,15 @@ const createPremiumWindow = (csrf) => {
         <PremiumBodyWindow csrf={csrf} />, 
         document.querySelector("#posts")
     );             
+    
+    ReactDOM.render(
+        <PremButton />, document.querySelector("#gridContainer")
+    );
+   
+    // after subsribe button is clicked, disable it
+    document.querySelector('#subscribeButton').onclick = function() {
+        this.disabled = true;
+    }
 };
 
 const loadAllPostsFromServer = () => {
@@ -305,12 +340,12 @@ const loadPostsFromServer = () => {
 };
 
 const setup = function(csrf) {
-    const FeedButton = document.querySelector("#allPostsButton");
+    const feedButton = document.querySelector("#allPostsButton");
     const profileButton = document.querySelector("#profileButton");
     const premiumButton = document.querySelector("#premiumButton");
     const settingsButton = document.querySelector("#settingsButton");
     
-    FeedButton.addEventListener("click", (e) => {
+    feedButton.addEventListener("click", (e) => {
         e.preventDefault();
         createFeedWindow(csrf);
         loadAllPostsFromServer();
